@@ -1,0 +1,22 @@
+class Personagem:
+    def atacar(self):
+        pass  # Implementação será sobrescrita nas subclasses
+
+
+class Guerreiro(Personagem):
+    def atacar(self):
+        print("Guerreiro ataca com sua espada!")
+
+
+class Mago(Personagem):
+    def atacar(self):
+        print("Mago lança uma bola de fogo!")
+
+
+# Criando uma lista de personagens
+personagens = [Guerreiro(), Mago(), Guerreiro(), Mago()]
+
+# Fazendo com que cada personagem ataque
+for personagem in personagens:
+    personagem.atacar()
+
