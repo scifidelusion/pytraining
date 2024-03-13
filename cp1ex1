@@ -33,3 +33,37 @@ itens_venda = ler_arquivo_vendas(nome_arquivo)
 total_vendas = calcular_total_vendas(itens_venda)
 print("Total de Vendas:", total_vendas)
 
+
+class Funcionario:
+    def __init__(self, nome, funcionario_id, cargo):
+        self.nome = nome
+        self.funcionario_id = funcionario_id
+        self.cargo = cargo
+        self.notas = []
+
+     def adicionar_nota(self, nota):
+        if 0 <= nota <= 10:
+            self.notas.append(nota)
+        else:
+            print("A nota deve estar entre 0 e 10.")
+
+    def calcular_media(self):
+        if len(self.notas) >= 2:
+            return sum(self.notas) / len(self.notas)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
