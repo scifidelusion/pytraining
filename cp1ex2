@@ -1,52 +1,80 @@
-class Funcionario:
-    def __init__(self, nome, cargo, salario):
+class Produto:
+    def __init__(self, nome, preco, quantidade_estoque, quantidade_vendas):
         self.nome = nome
-        self.cargo = cargo
-        self.salario = salario
+        self.preco = preco
+        self.quantidade_estoque = quantidade_estoque
+        self.quantidade_vendas = quantidade_vendas
 
-    def __str__(self):
-        return f"{self.nome} - {self.cargo} - Salário: R${self.salario:.2f}"
+    def quantidade_em_estoque(self):
+        return self.quantidade_estoque
 
+    def valor_total_em_estoque(self):
+        return self.quantidade_estoque * self.preco
 
-class Departamento:
-    def __init__(self, nome):
-        self.nome = nome
-        self.funcionarios = []
+    def quantidade_vendida(self):
+        return self.quantidade_vendas
 
-    def adicionar_funcionario(self, funcionario):
-        self.funcionarios.append(funcionario)
+    def adicionar_ao_estoque(self, quantidade):
+        self.quantidade_estoque += quantidade
 
-    def calcular_folha_pagamento(self):
-        total_salarios = sum(funcionario.salario for funcionario in self.funcionarios)
-        return total_salarios
+    def retirar_do_estoque(self, quantidade):
+        if quantidade <= self.quantidade_estoque:
+            self.quantidade_estoque -= quantidade
+        else:
+            print(f"Quantidade insuficiente em estoque para retirar {quantidade} unidades do produto {self.nome}.")
 
-
-def ler_arquivo_funcionarios(nome_arquivo):
-    funcionarios = []
-    with open(nome_arquivo, 'r', encoding="utf-8") as arquivo:
-        linhas = arquivo.readlines()[1:]  # Ignorar o cabeçalho
-        for linha in linhas:
-            dados = linha.strip().split(',')
-            nome = dados[0]
-            cargo = dados[1]
-            salario = float(dados[2])
-            funcionario = Funcionario(nome, cargo, salario)
-            funcionarios.append(funcionario)
-    return funcionarios
+    def adicionar_quantidade_vendida(self, quantidade):
+        self.quantidade_vendas += quantidade
 
 
+def encontrar_produtos_destaque(produtos):
+    mais_vendido = max(produtos, key=lambda produto: produto.quantidade_vendas)
+    maior_quantidade_em_estoque = max(produtos, key=lambda produto: produto.quantidade_estoque)
 
-nome_arquivo = 'funcionarios.txt'
-funcionarios = ler_arquivo_funcionarios(nome_arquivo)
+    return mais_vendido, maior_quantidade_em_estoque
 
-departamento = Departamento("TI")  # Exemplo de nome de departamento
 
-for funcionario in funcionarios:
-    departamento.adicionar_funcionario(funcionario)
+def imprimir_informacoes(produtos):
+    for produto in produtos:
+        print(f"\nNome: {produto.nome}")
+        print(f"Quantidade em Estoque: {produto.quantidade_em_estoque()}")
+        print(f"Valor Total em Estoque: R${produto.valor_total_em_estoque():.2f}")
+        print(f"Quantidade Vendida: {produto.quantidade_vendida()}")
 
-total_folha_pagamento = departamento.calcular_folha_pagamento()
 
-print("Folha de Pagamento do Departamento", departamento.nome)
-for funcionario in departamento.funcionarios:
-    print(funcionario)
-print("Total da Folha de Pagamento:", total_folha_pagamento)
+produtos = []
+with open("produtos.txt", "r") as arquivo:
+    linhas = arquivo.readlines()
+    for linha in linhas:
+        dados = linha.strip().split(",")
+        nome, preco, quantidade_estoque, quantidade_vendas = dados
+        produtos.append(Produto(nome, float(preco), int(quantidade_estoque), int(quantidade_vendas)))
+
+
+print("Informações:")
+imprimir_informacoes(produtos)
+
+
+produtos[0].adicionar_ao_estoque(10)
+
+
+produtos[1].retirar_do_estoque(5)
+
+
+produtos[2].adicionar_quantidade_vendida(20)
+
+
+print("\nInformações após alterações:")
+imprimir_informacoes(produtos)
+
+
+mais_vendido, maior_quantidade_em_estoque = encontrar_produtos_destaque(produtos)
+
+
+print("\nProduto mais vendido:")
+print(f"Nome: {mais_vendido.nome}")
+print(f"Quantidade Vendida: {mais_vendido.quantidade_vendida()}")
+
+print("\nProduto com maior quantidade em estoque:")
+print(f"Nome: {maior_quantidade_em_estoque.nome}")
+print(f"Quantidade em Estoque: {maior_quantidade_em_estoque.quantidade_em_estoque()}")
