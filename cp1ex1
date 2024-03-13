@@ -41,7 +41,7 @@ class Funcionario:
         self.cargo = cargo
         self.notas = []
 
-     def adicionar_nota(self, nota):
+    def adicionar_nota(self, nota):
         if 0 <= nota <= 10:
             self.notas.append(nota)
         else:
@@ -50,6 +50,81 @@ class Funcionario:
     def calcular_media(self):
         if len(self.notas) >= 2:
             return sum(self.notas) / len(self.notas)
+        else:
+            print("É necessário ter pelo menos 2 notas para calcular a média.")
+
+    def obter_avaliacao(self):
+        media = self.calcular_media()
+        if 0 <= media <= 4:
+            return "Ruim"
+        elif 5 <= media <= 8:
+            return "Médio"
+        elif 9 <= media <= 10:
+            return "Bom"
+        else:
+            return "NOTA INVÁLIDO"
+
+
+funcionario1 = Funcionario("Funcionario1", 1, "Analista")
+funcionario2 = Funcionario("Funcionario2", 2, "Desenvolvedor")
+funcionario3 = Funcionario("Funcionario3", 3, "Gerente")
+funcionario4 = Funcionario("Funcionario4", 4, "Analista Sênior")
+
+
+funcionario1.adicionar_nota(8)
+funcionario1.adicionar_nota(7)
+funcionario1.adicionar_nota(6)
+
+funcionario2.adicionar_nota(9)
+funcionario2.adicionar_nota(8)
+
+funcionario3.adicionar_nota(5)
+funcionario3.adicionar_nota(6)
+
+funcionario4.adicionar_nota(10)
+funcionario4.adicionar_nota(9)
+
+
+funcionarios = [funcionario1, funcionario2, funcionario3, funcionario4]
+
+melhor_media = None
+pior_media = None
+media_departamento = 0
+
+for funcionario in funcionarios:
+    avaliacao = funcionario.obter_avaliacao()
+    media = funcionario.calcular_media()
+    media_departamento += media
+
+    print(f"\nID: {funcionario.funcionario_id}")
+    print(f"Nome: {funcionario.nome}")
+    print(f"Cargo: {funcionario.cargo}")
+    print(f"Média: {media:.2f}")
+    print(f"Avaliação: {avaliacao}")
+
+    if melhor_media is None or media > melhor_media:
+        melhor_media = media
+        melhor_funcionario = funcionario
+
+    if pior_media is None or media < pior_media:
+        pior_media = media
+        pior_funcionario = funcionario
+
+media_departamento /= len(funcionarios)
+
+print("\nMelhor média do departamento:")
+print(f"ID: {melhor_funcionario.funcionario_id}")
+print(f"Nome: {melhor_funcionario.nome}")
+print(f"Cargo: {melhor_funcionario.cargo}")
+print(f"Média: {melhor_media:.2f}")
+
+print("\nPior média do departamento:")
+print(f"ID: {pior_funcionario.funcionario_id}")
+print(f"Nome: {pior_funcionario.nome}")
+print(f"Cargo: {pior_funcionario.cargo}")
+print(f"Média: {pior_media:.2f}")
+
+print("\nMédia geral do departamento: {:.2f}".format(media_departamento))
 
 
 
